@@ -27,3 +27,24 @@ export const chefCocinaInternacional = async (req, res)=> {
         res.status(500).json({ error: 'Error en el servidor' });
       }
     };
+
+export const chefDataBase = async (req, res)=> {
+        try {
+          const chefsito = await client.db("test").collection("chefs").countDocuments();
+              res.json(chefsito);
+        } catch (error) {
+          console.error('Error:', error);
+          res.status(500).json({ error: 'Error en el servidor' });
+        }
+      };
+
+      
+export const chefAsiatico = async (req, res)=> {
+    try {
+      const asiatico = await client.db("test").collection("chefs").insertOne({nombre: "Chef D", especialidad: "Cocina Asiática"});
+          res.json(asiatico);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+  };

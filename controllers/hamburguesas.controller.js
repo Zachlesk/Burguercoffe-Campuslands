@@ -50,3 +50,58 @@ export const panIntegral = async (req, res)=> {
             res.status(500).json({ error: 'Error en el servidor' });
           }
         };
+
+        
+export const quesoCheddar = async (req, res) => {
+    try {
+      const hamburguesas = await client.db("test").collection("hamburguesas").find({ ingredientes: { $nin: ['Queso cheddar'] } }).toArray();
+      if (hamburguesas.length === 0) {
+        console.log({ mensaje: 'Todas tienen cheddar' });
+      } else {
+        console.log({ hamburguesas });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+  };
+
+export const hamburguesasNueve = async (req, res) => {
+    try {
+        const hamburguesas = await client.db("test").collection("hamburguesas").find({ precio: { $lte: 9 } });
+    
+        if (!hamburguesas || hamburguesas.length === 0) {
+          return res.status(404).json({ mensaje: 'No hay hamburguesas q valgan $9' });
+        }
+    
+        res.json(hamburguesas);
+      } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error en el servidor' });
+      }
+  };
+
+export const menositocinco = async (req, res) => {
+    try {
+      const resultado = await client.db("test").collection("hamburguesas").deleteMany({ ingredientes: { $size: { $lt: 5 } } });
+  
+      if (resultado.n === 0) {
+        return res.status(404).json({ mensaje: 'No burguersitas' });
+      }
+  
+      res.json({ mensaje: `Se eliminaron ${resultado.n} hamburguesas con menos de 5 ingredientes` });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+}
+
+export const ordenAscendente = async (req, res) => {
+    try {
+        const hamburguesas = await client.db("test").collection("hamburguesas").aggregate([{ $sort: { precio: 1 } } ]).toArray();;
+        console.log(hamburguesas);
+      } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error en el servidor' });
+      }
+  };

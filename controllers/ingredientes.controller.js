@@ -37,3 +37,49 @@ export const ingredientesZero = async (req, res)=> {
       res.status(500).json({ error: 'Error en el servidor' });
     }
   };
+
+  
+export const ingredienteCaro = async (req, res)=> {
+    try { 
+    const resultado = await client.db("test").collection("ingredientes").aggregate([{ $sort: { precio: -1 } },{ $limit: 1 }, ]).toArray();
+    
+      if (resultado.length === 0) {
+        console.log({ mensaje: 'No se encontraron ingredientes' });
+      } else {
+        console.log({ ingredienteCaro: resultado[0] });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+    };
+
+export const stockPan = async (req, res) => {
+        try {
+          const resultado = await client.db("test").collection("ingredientes").updateOne({ nombre: "Pan" },{ $inc: { stock: 100 } } 
+          );
+      
+          if (resultado.n === 0 ) {
+            res.json({ mensaje: 'No existe' });
+          } else {
+            res.json({ mensaje: 'Si jala' });
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          res.status(500).json({ error: 'Error en el servidor' });
+        }
+      };
+
+  export const ingredienteClasico = async (req, res) => {
+        try {
+            const ingredientes = await client.db("test").collection("ingredientes").find({ descripcion: { $regex: "clásico" } });
+          if (!ingredientes || ingredientes.length === 0) {
+            return res.status(404).json({ mensaje: 'No hay clasicos en la desc' });
+          }
+          res.json(ingredientes);
+        } catch (error) {
+          console.error('Error:', error);
+          res.status(500).json({ error: 'Error en el servidor' });
+        }
+      };
+    
