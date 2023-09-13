@@ -83,3 +83,32 @@ export const stockPan = async (req, res) => {
         }
       };
     
+export const ingredientesPrecio = async (req, res)=>{
+  try {
+    const precio = await client.db('test').collection('ingredientes').find({precio: {$gte: 2, $lte:5}}).toArray();
+    console.log(precio)
+  } catch (error) {
+    console.error('Error:', error);
+          res.status(500).json({ error: 'Error en el servidor' });
+  }
+}
+
+export const panDescripcion = async (req, res)=>{
+  try {
+    const precio = await client.db('test').collection('ingredientes').updateOne({ nombre: 'Pan' }, { $set: { descripcion: 'Pan fresco y crujiente' } });
+    console.log(precio)
+  } catch (error) {
+    console.error('Error:', error);
+          res.status(500).json({ error: 'Error en el servidor' });
+  }
+}
+
+export const ordenAlfabetico = async (req, res)=>{
+  try {
+    const precio = await client.db('test').collection('ingredientes').find().sort( { nombre: 1 }).toArray();
+    console.log(precio)
+  } catch (error) {
+    console.error('Error:', error);
+          res.status(500).json({ error: 'Error en el servidor' });
+  }
+}

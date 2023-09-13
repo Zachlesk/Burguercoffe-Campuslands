@@ -1,5 +1,5 @@
 import express from "express";
-import { chefsEspecialidad, chefCocinaInternacional, chefDataBase, chefAsiatico } from "../controllers/chefs.controller.js";
+import { chefsEspecialidad, chefCocinaInternacional, chefDataBase, chefAsiatico, noChefA, noVegetariano} from "../controllers/chefs.controller.js";
 
 const router = express.Router();
 
@@ -38,6 +38,25 @@ router.put("/internacional", async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+  router.get("/less", async (req, res) => {
+    try {
+      const chefs = await noChefA();
+      res.json(chefs);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  router.delete("/vegetariano", async (req, res) => {
+    try {
+      const chefs = await noVegetariano();
+      res.json(chefs);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
   
 
 export default router;

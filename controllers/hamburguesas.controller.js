@@ -83,13 +83,13 @@ export const hamburguesasNueve = async (req, res) => {
 
 export const menositocinco = async (req, res) => {
     try {
-      const resultado = await client.db("test").collection("hamburguesas").deleteMany({ ingredientes: { $size: { $lt: 5 } } });
+      const resultado = await client.db("test").collection("hamburguesas").deleteMany({ $expr: { $lt: [{ $size: "$ingredientes" }, 5]}});
   
       if (resultado.n === 0) {
         return res.status(404).json({ mensaje: 'No burguersitas' });
       }
   
-      res.json({ mensaje: `Se eliminaron ${resultado.n} hamburguesas con menos de 5 ingredientes` });
+      console.log({ mensaje: `Se eliminaron ${resultado.n} hamburguesas con menos de 5 ingredientes` });
     } catch (error) {
       console.error('Error:', error);
       res.status(500).json({ error: 'Error en el servidor' });
@@ -105,3 +105,65 @@ export const ordenAscendente = async (req, res) => {
         res.status(500).json({ error: 'Error en el servidor' });
       }
   };
+
+  export const tomatelettuce = async (req, res) => {
+    try {
+        const hamburguesas = await client.db("test").collection("hamburguesas").find({ingredientes: { $in: ['Tomate', 'Lechuga'] }}).toArray();
+        console.log(hamburguesas);
+      } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error en el servidor' });
+      }
+  };
+
+  export const incrementarGourmet = async (req, res) => {
+    try {
+        const hamburguesas = await client.db("test").collection("hamburguesas").updateMany({ categoria: 'Gourmet' }, { $inc: { precio: 2 } } 
+        )
+        console.log(hamburguesas);
+      } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error en el servidor' });
+      }
+  };
+
+  export const hamburguesaCaro = async (req, res)=> {
+    try { 
+    const resultado = await client.db("test").collection("hamburguesas").aggregate([{ $sort: { precio: -1 } },{ $limit: 1 }, ]).toArray();
+    
+      if (resultado.length === 0) {
+        console.log({ mensaje: 'No se encontraron hamburguesas' });
+      } else {
+        console.log({ ingredienteCaro: resultado[0] });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+    };
+
+    export const pepinillos = async (req, res)=> {
+      try {
+        const resultado = await client.db("test").collection("hamburguesas").updateMany({ categoria: 'Clásica' }, { $push: { ingredientes: 'Pepinillos' } });
+        if (resultado.n === 0) {
+          res.status(404).json({ error: 'No se encontraron hamburguesas clásicas' });
+          return;
+        }
+        console.log({ mensaje: 'Ingrediente agregado a las hamburguesas clásicas' });
+      } catch (error) {
+        console.error('Error', error);
+        res.status(500).json({ error: 'Error en el servidor' });
+      }};
+
+    export const sieteIngredientes = async (req, res)=> {
+        try {
+          const resultado = await client.db("test").collection("hamburguesas").find({ ingredientes: { $size: 7 } }).toArray();
+          if (resultado.n === 0) {
+            res.status(404).json({ error: 'No hay 7  ingredientes' });
+            return;
+          }
+          console.log(resultado);
+        } catch (error) {
+          console.error('Error', error);
+          res.status(500).json({ error: 'Error en el servidor' });
+        }};

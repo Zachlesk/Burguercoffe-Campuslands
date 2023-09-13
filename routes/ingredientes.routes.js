@@ -1,5 +1,5 @@
 import express from "express";
-import { ingredientes400, aumentarPrecioIngredientes, ingredientesZero, ingredienteCaro, stockPan, ingredienteClasico } from "../controllers/ingredientes.controller.js";
+import { ingredientes400, aumentarPrecioIngredientes, ingredientesZero, ingredienteCaro, stockPan, ingredienteClasico, ingredientesPrecio, panDescripcion , ordenAlfabetico} from "../controllers/ingredientes.controller.js";
 
 const router = express.Router();
 
@@ -57,4 +57,30 @@ router.put("/clasico", async (req, res) => {
   }
 });
 
+router.get("/precio", async (req, res) => {
+  try {
+    const ingredients = await ingredientesPrecio();
+    res.json(ingredients);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.put("/pan", async (req, res) => {
+  try {
+    const ingredients = await panDescripcion();
+    res.json(ingredients);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/alfabetico", async (req, res) => {
+  try {
+    const ingredients = await ordenAlfabetico();
+    res.json(ingredients);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 export default router;

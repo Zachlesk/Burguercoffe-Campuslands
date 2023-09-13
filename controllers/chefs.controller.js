@@ -48,3 +48,24 @@ export const chefAsiatico = async (req, res)=> {
       res.status(500).json({ error: 'Error en el servidor' });
     }
   };
+
+        
+export const noChefA = async (req, res)=> {
+  try {
+    const chefA = await client.db("test").collection("chefs").find({ nombre: { $ne: 'ChefA' } }).toArray();
+        console.log(chefA);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+};
+
+export const noVegetariano = async (req, res)=> {
+  try {
+    const vegetariano = await client.db("test").collection("chefs").deleteMany({ especialidad: 'Cocina Vegetariana' });
+        console.log(vegetariano);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+};
