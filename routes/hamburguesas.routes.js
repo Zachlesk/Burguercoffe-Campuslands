@@ -1,5 +1,5 @@
 import express from "express";
-import { hamburguesaVegetariana, chefsBurguers, nuevoIngrediente, panIntegral, quesoCheddar, hamburguesasNueve, menositocinco, ordenAscendente, tomatelettuce, incrementarGourmet, hamburguesaCaro, pepinillos, sieteIngredientes} from "../controllers/hamburguesas.controller.js";
+import { hamburguesaVegetariana, chefsBurguers, nuevoIngrediente, panIntegral, quesoCheddar, hamburguesasNueve, menositocinco, ordenAscendente, tomatelettuce, incrementarGourmet, hamburguesaCaro, pepinillos, sieteIngredientes, caraGourmet, ingredientesHamburguesas, chefsHamburguesa} from "../controllers/hamburguesas.controller.js";
 
 const router = express.Router();
 
@@ -119,4 +119,33 @@ router.get("/chefB", async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+  router.get("/gourmetCaro", async (req, res) => {
+    try {
+      const hamburguesas = await caraGourmet();
+      res.json(hamburguesas);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  router.get("/ingredientesHamburguesas", async (req, res) => {
+    try {
+      const hamburguesas = await ingredientesHamburguesas();
+      res.json(hamburguesas);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  router.get("/chefsHamburguesa", async (req, res) => {
+    try {
+      const hamburguesas = await chefsHamburguesa();
+      res.json(hamburguesas);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+
 export default router;

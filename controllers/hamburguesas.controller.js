@@ -167,3 +167,44 @@ export const ordenAscendente = async (req, res) => {
           console.error('Error', error);
           res.status(500).json({ error: 'Error en el servidor' });
         }};
+
+    export const caraGourmet = async (req, res) => {
+      try {
+        const result = await client.db("test").collection("hamburguesas").aggregate([
+          { $match: { chef: 'ChefC', categoria: 'Gourmet' } },
+          { $sort: { precio: -1 } },
+          { $limit: 1 }
+      ]).toArray();
+      console.log(result)
+  } catch (error) {
+    console.error('Error', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+    }
+
+    export const ingredientesHamburguesas = async (req, res) => {
+      try {
+        const result = await client.db("test").collection("hamburguesas").aggregate([
+            { $unwind: '$ingredientes' },
+            { $group: { _id: '$ingredientes', count: { $sum: 1 } } }
+        ]).toArray();
+        console.log(result);
+      } catch (error) {
+        console.error('Error', error);
+        res.status(500).json({ error: 'Error en el servidor' });
+      }
+    }
+
+    export const chefsHamburguesa = async (req, res) => {
+    try {
+      const result = await client.db("test").collection("hamburguesas").aggregate([
+        { $group: {_id: "$chef", cantidad: {$sum: 1}}}
+      ]).toArray();
+      console.log(result);
+    } catch (error) {
+      console.error('Error', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+  }
+
+  
