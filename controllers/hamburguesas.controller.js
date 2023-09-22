@@ -207,4 +207,104 @@ export const ordenAscendente = async (req, res) => {
     }
   }
 
-  
+  export const categoriaHamburguesaMayor = async(req, res)=> {
+    try {
+      const result = await client.db('test').collection('hamburguesas').aggregate([
+        { $group: {_id: '$categoria', cantidad: {$sum: 1}}}
+      ]).toArray();
+      console.log(result)
+    } catch (error) {
+      console.error('Error', error)
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+  }
+
+  export const costoTotalChefs = async(req, res)=>{
+    try {
+      const result = await client.db('test').collection('hamburguesas').aggregate([
+            { $unwind: '$ingredientes' },
+            { $lookup: { from: 'ingredientes', localField: 'ingredientes', foreignField: 'nombre', as: 'ingredientesData' } },
+            {
+                $group: {
+                    _id: '$chef',
+                    costoTotal: { $sum: { $sum: '$ingredientesData.precio' } }
+                }
+            }
+      ]).toArray();
+      console.log(result);
+    } catch (error) {
+      console.error('Error', error)
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+  }
+
+  export const ingredientesNaN = async(req, res)=> {
+    try {
+      const result = await client.db('test').collection('hamburguesas').distinct('ingredientes');
+      const resulted = await client.db("test").collection("ingredientes").find({ nombre: { $nin: result}}).toArray();
+      console.log(resulted)
+    } catch (error) {
+      console.error('Error', error)
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+  }
+
+  export const descripcionHamburguesa = async (req, res) => {
+    try {
+        try {
+        const result = await client.db('test').collection('hamburguesas').aggregate([
+            { $lookup: { from: 'categorias', localField: 'categoria', foreignField: 'nombre', as: 'categoriasData' } },
+            {
+                $project: {
+                    _id: 0,
+                    categoria: '$categoriasData.nombre',
+                    descripcion: '$categoriasData.descripcion'
+                }
+            }
+        ]).toArray();
+        console.log(result);
+        } catch (error) {
+            res.status(404).json({message: error.message});
+        }
+    } catch (error) {
+        res.status(404).json({message: error.message});
+    }
+};
+
+export const chefHamburguesaIngredientes = async (req, res) => {
+    try {
+        const result = await client.db('test').collection('hamburguesas').aggregate([
+            { $unwind: '$ingredientes' },
+            { $group: { _id: '$chef', ingredientes: { $sum: 1 } } },
+            { $sort: { ingredientes: -1 } },
+            { $limit: 1 }
+        ]).toArray();
+        console.log(result);
+    } catch (error) {
+        res.status(404).json({message: error.message});
+    }
+};
+
+export const precioPromedioHamburguesa = async (req, res) => {
+    try {
+        const result = await client.db('test').collection('hamburguesas').aggregate([
+            { $group: { _id: '$categoria', precio: { $avg: '$precio' } } }
+        ]).toArray();
+        console.log(result);
+    } catch (error) {
+        res.status(404).json({message: error.message});
+    }
+};
+
+export const chefsHamburguesaCara = async (req, res) => {
+    try {
+        const result = await client.db('test').collection('hamburguesas').aggregate([
+            { $group: { _id: '$chef', hamburguesaCara: { $max: '$precio' } } },
+            { $lookup: { from: 'chefs', localField: '_id', foreignField: 'nombre', as: 'chefData' } },
+            { $project: { _id: 0, 'chefData.nombre': 1, hamburguesaCara: 1 } }
+        ]).toArray();
+        res.json(result);
+    } catch (error) {
+        res.status(404).json({message: error.message});
+    }
+};

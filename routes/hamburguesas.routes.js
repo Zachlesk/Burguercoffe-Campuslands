@@ -1,5 +1,5 @@
 import express from "express";
-import { hamburguesaVegetariana, chefsBurguers, nuevoIngrediente, panIntegral, quesoCheddar, hamburguesasNueve, menositocinco, ordenAscendente, tomatelettuce, incrementarGourmet, hamburguesaCaro, pepinillos, sieteIngredientes, caraGourmet, ingredientesHamburguesas, chefsHamburguesa} from "../controllers/hamburguesas.controller.js";
+import { hamburguesaVegetariana, chefsBurguers, nuevoIngrediente, panIntegral, quesoCheddar, hamburguesasNueve, menositocinco, ordenAscendente, tomatelettuce, incrementarGourmet, hamburguesaCaro, pepinillos, sieteIngredientes, caraGourmet, ingredientesHamburguesas, chefsHamburguesa, categoriaHamburguesaMayor, costoTotalChefs, ingredientesNaN, descripcionHamburguesa, chefHamburguesaIngredientes, precioPromedioHamburguesa, chefsHamburguesaCara } from "../controllers/hamburguesas.controller.js";
 
 const router = express.Router();
 
@@ -147,5 +147,67 @@ router.get("/chefB", async (req, res) => {
     }
   });
 
+  router.get("/categoriaHamburguesaMayor", async (req, res)=>{
+    try {
+      const hamburguesas = await categoriaHamburguesaMayor();
+      res.json(hamburguesas)
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
+
+  router.get("/costoTotalChefs", async (req, res)=>{
+    try {
+      const hamburguesas = await costoTotalChefs();
+      res.json(hamburguesas)
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
+
+  router.get("/ingredientesNaN", async (req, res)=>{
+    try {
+      const hamburguesas = await ingredientesNaN();
+      res.json(hamburguesas)
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
+
+  router.get("/descripcionHamburguesa", async (req, res)=>{
+    try {
+      const hamburguesas = await descripcionHamburguesa();
+      res.json(hamburguesas)
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
+
+  router.get("/chefHamburguesaIngredientes", async (req, res)=>{
+    try {
+      const hamburguesas = await chefHamburguesaIngredientes();
+      res.json(hamburguesas)
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
+
+  router.get("/precioPromedioHamburguesa", async (req, res)=>{
+    try {
+      const hamburguesas = await precioPromedioHamburguesa();
+      res.json(hamburguesas)
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
+
+  router.get("/chefsHamburguesaCara", async (req, res)=>{
+    try {
+      const hamburguesas = await chefsHamburguesaCara();
+      res.json(hamburguesas)
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
 
 export default router;

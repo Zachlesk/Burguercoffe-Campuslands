@@ -102,6 +102,21 @@ Para poder instalarlo, sigue los siguientes pasos:
 
 16. `http://localhost:8020/hamburguesas/chefsHamburguesa` 🥙 : Listar los chefs junto con el número de hamburguesas que han preparado
 
+17. `http://localhost:8020/hamburguesas/categoriaHamburguesaMayor` 🍔 : Encuentra la categoría con la mayor cantidad de hamburguesas.
+
+18. `http://localhost:8020/hamburguesas/costoTotalChefs` 🍳 : Listar todos los chefs y el costo total de ingredientes de todas las hamburguesas que han preparado.
+
+19. `http://localhost:8020/hamburguesas/ingredientesNaN` 🥓 : Encontrar todos los ingredientes que no están en ninguna hamburguesa.
+
+20. `http://localhost:8020/hamburguesas/descripcionHamburguesa` 📖 : Listar todas las hamburguesas con su descripción de categoría
+
+21. `http://localhost:8020/hamburguesas/chefHamburguesaIngredientes` 👩‍🍳 : Encuentra el chef que ha preparado hamburguesas con el mayor número de ingredientes en total.
+
+21. `http://localhost:8020/hamburguesas/precioPromedioHamburguesa` 📶 : Encontrar el precio promedio de las hamburguesas en cada categoría.
+
+22. `http://localhost:8020/hamburguesas/chefsHamburguesaCara` ✴️ : Listar los chefs y la hamburguesa más cara que han preparado.
+
+
 ## Ingredientes
 
 1. `http://localhost:8020/ingredientes/stock` ⬇️: Encontrar todos los ingredientes con stock menor a 400.
